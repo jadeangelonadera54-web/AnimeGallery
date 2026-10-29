@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:AnimeGallery.Models"
+             x:Class="AnimeGallery.Views.CharacterDetailPage"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#0D0814" Offset="0.0" />
+            <GradientStop Color="#170F2C" Offset="0.45" />
+            <GradientStop Color="#22153F" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Top Navigation Bar -->
+        <Grid Grid.Row="0"
+              Padding="16,14,16,14"
+              ColumnDefinitions="Auto,*,Auto"
+              BackgroundColor="#140D26">
+            
+            <!-- Back Button -->
+            <Border Grid.Column="0"
+                    Stroke="#4A3477"
+                    StrokeThickness="1"
+                    BackgroundColor="#231742"
+                    HeightRequest="42"
+                    WidthRequest="42"
+                    StrokeShape="RoundRectangle 21">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackButtonClicked" />
+                </Border.GestureRecognizers>
+                <Label Text="←"
+                       TextColor="#E0AAFF"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <!-- Page Title -->
+            <VerticalStackLayout Grid.Column="1"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center">
+                <Label Text="CHARACTER DOSSIER"
+                       TextColor="#C77DFF"
+                       FontSize="11"
+                       FontAttributes="Bold"
+                       CharacterSpacing="1.5"
+                       HorizontalOptions="Center" />
+                <Label Text="{Binding Name}"
+                       TextColor="#FFFFFF"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       LineBreakMode="TailTruncation"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <!-- Favorite Button -->
+            <Border Grid.Column="2"
+                    x:Name="FavoriteBorder"
+                    Stroke="#4A3477"
+                    StrokeThickness="1"
+                    BackgroundColor="#231742"
+                    HeightRequest="42"
+                    WidthRequest="42"
+                    StrokeShape="RoundRectangle 21">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnFavoriteClicked" />
+                </Border.GestureRecognizers>
+                <Label x:Name="FavoriteLabel"
+                       Text="♡"
+                       TextColor="#E0AAFF"
+                       FontSize="20"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+        </Grid>
+
+        <!-- Main Scrollable Content -->
+        <ScrollView Grid.Row="1" Padding="16,16,16,30">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Hero Section: Character Image Card -->
+                <Border Stroke="#4B327D"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 20"
+                        BackgroundColor="#1C1236"
+                        Shadow="{Shadow Brush='#000000', Offset='0,8', Radius=16, Opacity=0.6}">
+                    <Grid HeightRequest="360" BackgroundColor="#180E2F">
+                        <!-- Character Image: AspectFit ensures the full character is visible -->
+                        <Image Source="{Binding Image}"
+                               Aspect="AspectFit"
+                               HorizontalOptions="Fill"
+                               VerticalOptions="Fill" />
+
+                        <!-- Dark Gradient Overlay at bottom of image for readability -->
+                        <BoxView VerticalOptions="End"
+                                 HeightRequest="180">
+                            <BoxView.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#00000000" Offset="0.0" />
+                                    <GradientStop Color="#B30F0A1F" Offset="0.5" />
+                                    <GradientStop Color="#F00E081D" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </BoxView.Background>
+                        </BoxView>
+
+                        <!-- Series Chip on Top Right -->
+                        <Border HorizontalOptions="End"
+                                VerticalOptions="Start"
+                                Margin="14"
+                                BackgroundColor="#CC241444"
+                                Stroke="#7B2CBF"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 12"
+                                Padding="12,5">
+                            <Label Text="{Binding Category}"
+                                   TextColor="#E0AAFF"
+                                   FontSize="12"
+                                   FontAttributes="Bold" />
+                        </Border>
+
+                        <!-- Character Name & Title inside Bottom of Hero -->
+                        <VerticalStackLayout VerticalOptions="End"
+                                             Padding="18,16"
+                                             Spacing="4">
+                            <Label Text="{Binding JapaneseName}"
+                                   TextColor="#C77DFF"
+                                   FontSize="13"
+                                   FontAttributes="Bold" />
+                            <Label Text="{Binding Name}"
+                                   TextColor="#FFFFFF"
+                                   FontSize="26"
+                                   FontAttributes="Bold" />
+                            <Label Text="{Binding AnimeSeries}"
+                                   TextColor="#BA94D1"
+                                   FontSize="15" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- Quick Attribute Cards -->
+                <Grid ColumnDefinitions="*,*"
+                      ColumnSpacing="12">
+                    
+                    <!-- Role Card -->
+                    <Border Grid.Column="0"
+                            Stroke="#3B2668"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 14"
+                            BackgroundColor="#1A1133"
+                            Padding="14,12">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="ROLE / STATUS"
+                                   TextColor="#9D4EDD"
+                                   FontSize="10"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="1" />
+                            <Label Text="{Binding Role}"
+                                   TextColor="#FFFFFF"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Affiliation Card -->
+                    <Border Grid.Column="1"
+                            Stroke="#3B2668"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 14"
+                            BackgroundColor="#1A1133"
+                            Padding="14,12">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="AFFILIATION"
+                                   TextColor="#9D4EDD"
+                                   FontSize="10"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="1" />
+                            <Label Text="{Binding Affiliation}"
+                                   TextColor="#FFFFFF"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Biography Section -->
+                <Border Stroke="#3B2668"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 16"
+                        BackgroundColor="#1A1133"
+                        Padding="18,16">
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="8">
+                            <BoxView WidthRequest="4"
+                                     HeightRequest="16"
+                                     Color="#9D4EDD"
+                                     CornerRadius="2"
+                                     VerticalOptions="Center" />
+                            <Label Text="BIOGRAPHY &amp; LORE"
+                                   TextColor="#FFFFFF"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="0.8" />
+                        </HorizontalStackLayout>
+
+                        <Label Text="{Binding FullBio}"
+                               TextColor="#D5D1E8"
+                               FontSize="14"
+                               LineHeight="1.35" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Signature Ability Card -->
+                <Border Stroke="#5A3A96"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 16"
+                        Padding="18,16">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#271649" Offset="0.0" />
+                            <GradientStop Color="#180F2F" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <VerticalStackLayout Spacing="12">
+                        <HorizontalStackLayout Spacing="8">
+                            <BoxView WidthRequest="4"
+                                     HeightRequest="16"
+                                     Color="#C77DFF"
+                                     CornerRadius="2"
+                                     VerticalOptions="Center" />
+                            <Label Text="SIGNATURE ABILITY"
+                                   TextColor="#E0AAFF"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="0.8" />
+                        </HorizontalStackLayout>
+
+                        <Label Text="{Binding SignatureAbility}"
+                               TextColor="#FFFFFF"
+                               FontSize="17"
+                               FontAttributes="Bold" />
+
+                        <!-- List of key abilities -->
+                        <Label Text="Key Powers &amp; Combat Techniques:"
+                               TextColor="#BA94D1"
+                               FontSize="12"
+                               Margin="0,4,0,0" />
+
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Abilities}"
+                                             Spacing="6">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Label Text="✦"
+                                               TextColor="#9D4EDD"
+                                               FontSize="12"
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding .}"
+                                               TextColor="#E8E3F5"
+                                               FontSize="13" />
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Iconic Quote Card -->
+                <Border Stroke="#482F7C"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 16"
+                        BackgroundColor="#170F2B"
+                        Padding="20,16">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="“"
+                               TextColor="#7B2CBF"
+                               FontSize="32"
+                               FontAttributes="Bold"
+                               Margin="0,-8,0,-12" />
+                        <Label Text="{Binding NotableQuote}"
+                               TextColor="#F1EAFF"
+                               FontSize="15"
+                               FontAttributes="Italic"
+                               LineHeight="1.3" />
+                        <Label Text="{Binding Name, StringFormat='— {0}'}"
+                               TextColor="#BA94D1"
+                               FontSize="12"
+                               HorizontalOptions="End"
+                               FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Power Attributes / Stats Section -->
+                <Border Stroke="#3B2668"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 16"
+                        BackgroundColor="#1A1133"
+                        Padding="18,16">
+                    <VerticalStackLayout Spacing="14">
+                        <HorizontalStackLayout Spacing="8">
+                            <BoxView WidthRequest="4"
+                                     HeightRequest="16"
+                                     Color="#9D4EDD"
+                                     CornerRadius="2"
+                                     VerticalOptions="Center" />
+                            <Label Text="COMBAT ATTRIBUTES"
+                                   TextColor="#FFFFFF"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="0.8" />
+                        </HorizontalStackLayout>
+
+                        <!-- Power Stat -->
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="Power &amp; Destructive Force" TextColor="#D5D1E8" FontSize="12" />
+                                <Label Grid.Column="1" Text="{Binding PowerDisplay}" TextColor="#E0AAFF" FontSize="12" FontAttributes="Bold" />
+                            </Grid>
+                            <ProgressBar Progress="{Binding PowerLevel}"
+                                         ProgressColor="#9D4EDD"
+                                         BackgroundColor="#2C1D4F" />
+                        </VerticalStackLayout>
+
+                        <!-- Agility Stat -->
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="Agility &amp; Speed" TextColor="#D5D1E8" FontSize="12" />
+                                <Label Grid.Column="1" Text="{Binding AgilityDisplay}" TextColor="#E0AAFF" FontSize="12" FontAttributes="Bold" />
+                            </Grid>
+                            <ProgressBar Progress="{Binding AgilityLevel}"
+                                         ProgressColor="#7B2CBF"
+                                         BackgroundColor="#2C1D4F" />
+                        </VerticalStackLayout>
+
+                        <!-- Intelligence Stat -->
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="Tactics &amp; Intelligence" TextColor="#D5D1E8" FontSize="12" />
+                                <Label Grid.Column="1" Text="{Binding IntelligenceDisplay}" TextColor="#E0AAFF" FontSize="12" FontAttributes="Bold" />
+                            </Grid>
+                            <ProgressBar Progress="{Binding IntelligenceLevel}"
+                                         ProgressColor="#5A189A"
+                                         BackgroundColor="#2C1D4F" />
+                        </VerticalStackLayout>
+
+                        <!-- Durability Stat -->
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="Durability &amp; Endurance" TextColor="#D5D1E8" FontSize="12" />
+                                <Label Grid.Column="1" Text="{Binding DurabilityDisplay}" TextColor="#E0AAFF" FontSize="12" FontAttributes="Bold" />
+                            </Grid>
+                            <ProgressBar Progress="{Binding DurabilityLevel}"
+                                         ProgressColor="#C77DFF"
+                                         BackgroundColor="#2C1D4F" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Back to Gallery Button at bottom -->
+                <Button Text="Back to Character Gallery"
+                        Clicked="OnBackButtonClicked"
+                        TextColor="#FFFFFF"
+                        BackgroundColor="#7B2CBF"
+                        CornerRadius="12"
+                        HeightRequest="48"
+                        FontAttributes="Bold"
+                        Margin="0,8,0,0" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

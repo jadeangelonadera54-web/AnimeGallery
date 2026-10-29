@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:AnimeGallery.Controls"
+             x:Class="AnimeGallery.Views.LoadingPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#0B0715" Offset="0.0" />
+            <GradientStop Color="#1E1238" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid>
+        <!-- Native Video Player for the Loading Screen -->
+        <controls:VideoPlayerView x:Name="LoadingVideoPlayer"
+                                  Source="loadingscreen.mp4"
+                                  HorizontalOptions="Fill"
+                                  VerticalOptions="Fill"
+                                  PlaybackCompleted="OnVideoCompleted" />
+
+        <!-- Fallback / Loading animation -->
+        <VerticalStackLayout x:Name="FallbackLayout"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             Spacing="16"
+                             IsVisible="False">
+            <Label Text="❖"
+                   TextColor="#C77DFF"
+                   FontSize="52"
+                   HorizontalOptions="Center" />
+            <Label Text="ANIME ARCHIVE"
+                   TextColor="#FFFFFF"
+                   FontSize="26"
+                   FontAttributes="Bold"
+                   CharacterSpacing="2"
+                   HorizontalOptions="Center" />
+            <ActivityIndicator IsRunning="True"
+                               Color="#C77DFF"
+                               HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
